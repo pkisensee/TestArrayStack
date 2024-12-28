@@ -14,6 +14,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// #define PK_ENABLE_EXCEPTIONS 1
+
 #include <cassert>
 #include <iostream>
 #include <utility>
@@ -40,6 +42,38 @@ struct Point // for testing SynthThreeWay
   constexpr bool operator>( const Point& lhs ) const { return x > lhs.x; }
 
 };
+
+#define testex(e, msg) TryCatch( ( [&]() { (e); } ), msg );
+
+/*
+#define testex(e, msg) \
+try {                   \
+  (e);                  \
+}                         \
+catch( std::out_of_range& ex ) {            \
+  test( std::string( ex.what() ) == msg );  \
+}                                           \
+catch( ... ) {                              \
+  test( false );                            \
+}
+*/
+
+template <typename TryLambda>
+void TryCatch( TryLambda&& tryLambda, std::string_view exceptionMsg )
+{
+  try
+  {
+    tryLambda();
+  }
+  catch( std::out_of_range& ex )
+  {
+    test( ex.what() == exceptionMsg );
+  }
+  catch( ... )
+  {
+    test( false );
+  }
+}
 
 void TestConstMembers( const array_stack<int, 3> as )
 {
@@ -76,6 +110,47 @@ int __cdecl main()
   a.push( 42 );
   test( a.size() == 1 );
   TestConstMembers( a );
+
+  // Exception handling
+  array_stack<int, 2> err;
+
+#if defined(PK_ENABLE_EXCEPTIONS)
+
+  testex( err.top(), "empty stack" );
+  testex( err.pop(), "empty stack" );
+
+  err.push( 1 );
+  err.push( 1 );
+  testex( err.push( 1 ), "stack overflow" );
+
+  int arrErr[3] = { 0, 1, 2 };
+  err.clear();
+  testex( err.push_range( arrErr ), "stack overflow" );
+
+  err.clear();
+  err.emplace( 1 );
+  err.emplace( 1 );
+  testex( err.emplace( 1 ), "stack overflow" );
+
+#else
+
+  // err.top(); // assertion
+  // err.pop(); // assertion
+
+  err.push( 1 );
+  err.push( 1 );
+  // err.push( 1 ); // assertion
+
+  int arrErr[3] = { 0, 1, 2 };
+  err.clear();
+  // err.push_range(arrErr); // assertion
+
+  err.clear();
+  err.emplace( 1 );
+  err.emplace( 1 );
+  // err.emplace( 1 ); // assertion
+
+#endif // PK_ENABLE_EXCEPTIONS
 
   // == and != comparison
   std::vector<int> v = {42};
