@@ -17,6 +17,7 @@
 #include <cassert>
 #include <iostream>
 #include <utility>
+#include <vector>
 
 #include "ArrayStack.h"
 #include "Util.h"
@@ -28,6 +29,24 @@ using namespace PKIsensee;
 #else
 #define test(e) static_cast<void>( (e) || ( Util::DebugBreak(), 0 ) )
 #endif
+
+struct Point // for testing SynthThreeWay
+{
+  int x = 0;
+  int y = 0;
+
+  // minimal requirement is support of < and >
+  constexpr bool operator<( const Point& lhs ) const { return x < lhs.x; }
+  constexpr bool operator>( const Point& lhs ) const { return x > lhs.x; }
+
+};
+
+void TestConstMembers( const ArrayStack<int, 3> as )
+{
+  test( as[0] == 42 );
+  test( as.top() == 42 );
+  // test( as.push( 1 ) ); compiler error
+}
 
 int __cdecl main()
 {
@@ -56,6 +75,7 @@ int __cdecl main()
   test( a.empty() );
   a.push( 42 );
   test( a.size() == 1 );
+  TestConstMembers( a );
 
   // == and != comparison
   std::vector<int> v = {42};
@@ -69,7 +89,15 @@ int __cdecl main()
   b.push( 41 );
   test( a != b ); // same size, different values
 
-  // <,>,<=,>= comparisons
+  // <,>,<=,>= comparisons with same size stacks
+  test( a > b );
+  test( b < a );
+  test( a >= b );
+  test( b <= a );
+
+  // <,>,<=,>= comparisons with different sized stacks
+  b.push( 0 );
+  test( a != b );
   test( a > b );
   test( b < a );
   test( a >= b );
@@ -94,9 +122,15 @@ int __cdecl main()
   test( d.top() == 6 );
   test( c.top() == 1234 );
 
+  // push lvalues and rvalues
+  std::string value = "Here's a long string that's stored on the heap";
   ArrayStack<std::string, 3> ss;
-  ss.push( "foo" );
-  ss.push( std::string("bar") );
+  ss.push( "foo" ); // rvalue
+  ss.push( std::string("bar") ); // rvalue
+  ss.push( value ); // lvalue
+  test( ss.top() == value );
+  ss.pop();
+  test( ss.top() == "bar" );
 
   // push_range
   int arr[3] = { 0, 1, 2 };
@@ -116,6 +150,7 @@ int __cdecl main()
   d.pop();
   test( d.top() == 42 );
 
+  // emplace
   ArrayStack<std::pair<int, double>, 4> pairStack;
   pairStack.emplace( 1, 1.0 );
   pairStack.emplace( 2, 2.0 );
@@ -126,6 +161,21 @@ int __cdecl main()
   test( pairStack.top().first == 1 );
   test( pairStack.top().second == 1.0 );
 
+  // free swap
+  // swap( pairStack, d ); won't compile
+  auto aTop = a.top();
+  auto bTop = b.top();
+  swap( a, b );
+  test( a.top() == bTop );
+  test( b.top() == aTop );
+
+  // SynthThreeWay alternate path
+  ArrayStack<Point, 10> ps1;
+  ArrayStack<Point, 10> ps2;
+  ps1.push( Point{} );
+  ps1[0].x = 1;
+  ps2.push( Point{} );
+  test( ps1 > ps2 );
 
 }
 
