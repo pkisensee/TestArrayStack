@@ -159,7 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TestArrayStack.cpp" />
+    <ClCompile Include="Test_array_stack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArrayStack\ArrayStack.vcxproj">

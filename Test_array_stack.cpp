@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  TestArrayStack.cpp
+//  Test_array_stack.cpp
 //
 //  Copyright © Pete Isensee (PKIsensee@msn.com).
 //  All rights reserved worldwide.
@@ -19,7 +19,7 @@
 #include <utility>
 #include <vector>
 
-#include "ArrayStack.h"
+#include "array_stack.h"
 #include "Util.h"
 
 using namespace PKIsensee;
@@ -41,7 +41,7 @@ struct Point // for testing SynthThreeWay
 
 };
 
-void TestConstMembers( const ArrayStack<int, 3> as )
+void TestConstMembers( const array_stack<int, 3> as )
 {
   test( as[0] == 42 );
   test( as.top() == 42 );
@@ -50,10 +50,10 @@ void TestConstMembers( const ArrayStack<int, 3> as )
 
 int __cdecl main()
 {
-  // ArrayStack<void, 1> fail;
+  // array_stack<void, 1> fail;
 
   // size and capacity
-  ArrayStack<int, 3> a;
+  array_stack<int, 3> a;
   test( a.size() == 0 );
   test( a.capacity() == 3 );
 
@@ -79,7 +79,7 @@ int __cdecl main()
 
   // == and != comparison
   std::vector<int> v = {42};
-  ArrayStack<int, 3> b( std::begin(v), std::end(v) );
+  array_stack<int, 3> b( std::begin(v), std::end(v) );
   test( a == b );
   test( b.top() == 42 );
   b.push( 1 );
@@ -103,11 +103,11 @@ int __cdecl main()
   test( a >= b );
   test( b <= a );
 
-  ArrayStack<int, 3> c( std::array<int, 3>{{ 4, 5, 6 }} );
+  array_stack<int, 3> c( std::array<int, 3>{{ 4, 5, 6 }} );
   test( c.top() == 6 );
 
   v.push_back( 24 );
-  ArrayStack<int, 3> d( std::from_range, v );
+  array_stack<int, 3> d( std::from_range, v );
   test( d.size() == 2 );
   test( d.top() == 24 );
   test( d[0] == 42 );
@@ -124,7 +124,7 @@ int __cdecl main()
 
   // push lvalues and rvalues
   std::string value = "Here's a long string that's stored on the heap";
-  ArrayStack<std::string, 3> ss;
+  array_stack<std::string, 3> ss;
   ss.push( "foo" ); // rvalue
   ss.push( std::string("bar") ); // rvalue
   ss.push( value ); // lvalue
@@ -151,7 +151,7 @@ int __cdecl main()
   test( d.top() == 42 );
 
   // emplace
-  ArrayStack<std::pair<int, double>, 4> pairStack;
+  array_stack<std::pair<int, double>, 4> pairStack;
   pairStack.emplace( 1, 1.0 );
   pairStack.emplace( 2, 2.0 );
   auto [ii, dd] = pairStack.top();
@@ -170,8 +170,8 @@ int __cdecl main()
   test( b.top() == aTop );
 
   // SynthThreeWay alternate path
-  ArrayStack<Point, 10> ps1;
-  ArrayStack<Point, 10> ps2;
+  array_stack<Point, 10> ps1;
+  array_stack<Point, 10> ps2;
   ps1.push( Point{} );
   ps1[0].x = 1;
   ps2.push( Point{} );
