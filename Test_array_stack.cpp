@@ -43,20 +43,8 @@ struct Point // for testing SynthThreeWay
 
 };
 
+// clever lambda to pass any type of expression to the TryCatch helper
 #define testex(e, msg) TryCatch( ( [&]() { (e); } ), msg );
-
-/*
-#define testex(e, msg) \
-try {                   \
-  (e);                  \
-}                         \
-catch( std::out_of_range& ex ) {            \
-  test( std::string( ex.what() ) == msg );  \
-}                                           \
-catch( ... ) {                              \
-  test( false );                            \
-}
-*/
 
 template <typename TryLambda>
 void TryCatch( TryLambda&& tryLambda, std::string_view exceptionMsg )
@@ -251,7 +239,6 @@ int __cdecl main()
   ps1[0].x = 1;
   ps2.push( Point{} );
   test( ps1 > ps2 );
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
