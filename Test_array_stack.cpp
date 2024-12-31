@@ -18,6 +18,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <ranges>
 #include <utility>
 #include <vector>
 
@@ -239,6 +240,24 @@ int __cdecl main()
   ps1[0].x = 1;
   ps2.push( Point{} );
   test( ps1 > ps2 );
+
+  // begin/end and friends
+  array_stack<int, 3> be;
+  be.push( 0 );
+  be.push( 4 );
+  be.push( 2 );
+  for( auto val : be )
+    std::cout << val;
+  std::cout << '\n';
+  std::for_each( be.cbegin(), be.cend(), []( int x ) { std::cout << x; } );
+  std::cout << '\n';
+  std::for_each( be.begin(), be.end(), []( int x ) { std::cout << x; } );
+  std::cout << '\n';
+  std::ranges::for_each( be, []( int x ) { std::cout << x; } );
+  std::cout << '\n';
+  std::for_each( be.rbegin(), be.rend(), []( int x ) { std::cout << x; } );
+  std::cout << '\n';
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
