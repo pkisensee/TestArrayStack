@@ -176,8 +176,7 @@ int __cdecl main()
   test( d.top() == 24 );
   test( d[0] == 42 );
   test( d[1] == 24 );
-  test( d[1] = -3 );
-  test( d[1] == -3 );
+  // test( d[1] = -3 ); // error
   // test( d[2] == 0 ); // error
 
   d.top() = 1234;
@@ -237,7 +236,7 @@ int __cdecl main()
   array_stack<Point, 10> ps1;
   array_stack<Point, 10> ps2;
   ps1.push( Point{} );
-  ps1[0].x = 1;
+  ps1.top().x = 1;
   ps2.push( Point{} );
   test( ps1 > ps2 );
 
