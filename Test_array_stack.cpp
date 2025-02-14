@@ -176,7 +176,8 @@ int __cdecl main()
   test( d.top() == 24 );
   test( d[0] == 42 );
   test( d[1] == 24 );
-  // test( d[1] = -3 ); // error
+  test( d[1] = -3 );
+  test( d[1] == -3 );
   // test( d[2] == 0 ); // error
 
   d.top() = 1234;
@@ -248,15 +249,32 @@ int __cdecl main()
   for( auto val : be )
     std::cout << val;
   std::cout << '\n';
-  std::for_each( be.cbegin(), be.cend(), []( int x ) { std::cout << x; } );
+  std::for_each( be.cbegin(), be.cend(), []( int x ) { std::cout << x; } ); // "042"
   std::cout << '\n';
-  std::for_each( be.begin(), be.end(), []( int x ) { std::cout << x; } );
+  std::for_each( be.begin(), be.end(), []( int x ) { std::cout << x; } ); // "042"
   std::cout << '\n';
-  std::ranges::for_each( be, []( int x ) { std::cout << x; } );
+  std::ranges::for_each( be, []( int x ) { std::cout << x; } ); // "042"
   std::cout << '\n';
-  std::for_each( be.rbegin(), be.rend(), []( int x ) { std::cout << x; } );
+  std::for_each( be.rbegin(), be.rend(), []( int x ) { std::cout << x; } ); // "240"
+  std::cout << '\n';
+  std::for_each( be.crbegin(), be.crend(), []( int x ) { std::cout << x; } ); // "240"
   std::cout << '\n';
 
+  // write to stack
+  std::ranges::fill( be, 1 );
+  test( be[0] == 1 );
+  test( be.top() == 1 );
+  std::ranges::for_each( be, []( int x ) { std::cout << x; } ); // "111"
+  std::cout << '\n';
+  test( be[1] = 2 );
+  test( be[2] = 3 );
+  test( be[1] == 2 );
+  test( be[2] == 3 );
+  std::ranges::for_each( be, []( int x ) { std::cout << x; } ); // "123"
+  std::cout << '\n';
+  std::ranges::reverse( be );
+  test( be[0] == 3 );
+  std::ranges::for_each( be, []( int x ) { std::cout << x; } ); // "321"
 }
 
 ///////////////////////////////////////////////////////////////////////////////
