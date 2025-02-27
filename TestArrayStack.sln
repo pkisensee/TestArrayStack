@@ -6,11 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestArrayStack", "TestArrayStack.vcxproj", "{9449111F-C90C-401A-B5D8-B648B09CD0AD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3E27FCA8-AC64-4143-BCE3-31A94CA80EB9} = {3E27FCA8-AC64-4143-BCE3-31A94CA80EB9}
+		{5FB36991-EDC5-47CF-84B2-268312497167} = {5FB36991-EDC5-47CF-84B2-268312497167}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArrayStack", "..\ArrayStack\ArrayStack.vcxproj", "{3E27FCA8-AC64-4143-BCE3-31A94CA80EB9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Util", "..\Util\Util.vcxproj", "{39A9CB6F-6F44-4205-A01B-555DB992A76E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinShim", "..\WinShim\WinShim.vcxproj", "{5FB36991-EDC5-47CF-84B2-268312497167}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +47,14 @@ Global
 		{39A9CB6F-6F44-4205-A01B-555DB992A76E}.Release|x64.Build.0 = Release|x64
 		{39A9CB6F-6F44-4205-A01B-555DB992A76E}.Release|x86.ActiveCfg = Release|Win32
 		{39A9CB6F-6F44-4205-A01B-555DB992A76E}.Release|x86.Build.0 = Release|Win32
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Debug|x64.ActiveCfg = Debug|x64
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Debug|x64.Build.0 = Debug|x64
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Debug|x86.ActiveCfg = Debug|Win32
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Debug|x86.Build.0 = Debug|Win32
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Release|x64.ActiveCfg = Release|x64
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Release|x64.Build.0 = Release|x64
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Release|x86.ActiveCfg = Release|Win32
+		{5FB36991-EDC5-47CF-84B2-268312497167}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
