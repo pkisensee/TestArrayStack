@@ -26,6 +26,7 @@
 #include "Util.h"
 
 using namespace PKIsensee;
+using namespace std::literals;
 
 #ifdef _DEBUG
 #define test(e) assert(e)
@@ -45,20 +46,20 @@ struct Point // for testing SynthThreeWay
 };
 
 // clever lambda to pass any type of expression to the TryCatch helper
-#define testex(e, msg) TryCatch( ( [&]() { (e); } ), msg );
+#define testex(e, E, msg) TryCatch<E>( ( [&]() { (e); } ), msg );
 
-template <typename TryLambda>
+template <typename Exception, typename TryLambda>
 void TryCatch( TryLambda&& tryLambda, std::string_view exceptionMsg )
 {
   try
   {
     tryLambda();
   }
-  catch( std::out_of_range& ex )
+  catch ( Exception& ex )
   {
     test( ex.what() == exceptionMsg );
   }
-  catch( ... )
+  catch ( ... )
   {
     test( false );
   }
@@ -105,21 +106,21 @@ int __cdecl main()
 
 #if defined(PK_ENABLE_EXCEPTIONS)
 
-  testex( err.top(), "empty stack" );
-  testex( err.pop(), "empty stack" );
+  testex( err.top(), std::out_of_range, "empty stack"sv );
+  testex( err.pop(), std::out_of_range, "empty stack"sv );
 
   err.push( 1 );
   err.push( 1 );
-  testex( err.push( 1 ), "stack overflow" );
+  testex( err.push( 1 ), std::out_of_range, "stack overflow"sv );
 
   int arrErr[3] = { 0, 1, 2 };
   err.clear();
-  testex( err.push_range( arrErr ), "stack overflow" );
+  testex( err.push_range( arrErr ), std::out_of_range, "stack overflow"sv );
 
   err.clear();
   err.emplace( 1 );
   err.emplace( 1 );
-  testex( err.emplace( 1 ), "stack overflow" );
+  testex( err.emplace( 1 ), std::out_of_range, "stack overflow"sv );
 
 #else
 
